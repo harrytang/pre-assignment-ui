@@ -62,7 +62,7 @@ const ApartmentForm: React.FC<Props> = ({closeFormHandler, formAction, formData,
         <main className={classes.layout}>
             <Paper className={classes.paper}>
                 <Typography component="h1" variant="h4" align="center">
-                    {formAction===null?'New Apartment': 'Update ApartmentForm'}
+                    {formAction===null?'New Apartment': 'Update Apartment'}
                 </Typography>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>

@@ -50,7 +50,7 @@ const Apartment: React.FC<Props> = ({apartment, openFormHandler, deleteHandler})
                 <CardMedia
                     className={classes.cardMedia}
                     image="https://source.unsplash.com/featured/?house"
-                    title="Image title"
+                    title={apartment.address}
                 />
                 <CardContent className={classes.cardContent}>
                     <Grid container>

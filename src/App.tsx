@@ -13,6 +13,7 @@ import apartmentsService from "./services/apartments";
 import Copyright from "./components/Copyright";
 import ApartmentForm from "./components/ApartmentForm";
 import Apartments from "./components/Apartments";
+import Notification from "./components/Notification";
 
 /* style */
 const useStyles = makeStyles(theme => ({
@@ -44,6 +45,10 @@ const App: React.FC = () => {
         notes: ''
     };
     // app states
+    const [notification, setNotification] = useState<{ message: string | null, type: string }>({
+        message: null,
+        type: 'success'
+    });
     const [apartments, setApartments] = useState<IApartment[]>([]);
     const [formStatus, setFormStatus] = useState<string>('closed');
     const [formAction, setFormAction] = useState<(string | null)>(null); // null for adding new apt, or formAction is _id of updating apt
@@ -57,7 +62,7 @@ const App: React.FC = () => {
 
     // fetch data from backend server
     useEffect(() => {
-        apartmentsService.getAll({limit: 6, skip:0}).then(
+        apartmentsService.getAll({limit: 6, skip: 0}).then(
             data => {
                 setPagination({
                     total: data.total,
@@ -68,6 +73,10 @@ const App: React.FC = () => {
             }
         );
     }, []);
+
+    const closeNotificationHandler = () => {
+        setNotification({message: null, type: 'success'});
+    };
 
     // pagination handlers (pre, next)
     const nextPageHandler = () => {
@@ -101,7 +110,7 @@ const App: React.FC = () => {
             apartmentsService.remove(id)
                 .then(res => {
                     const remainingApt = apartments.filter(apartment => apartment._id !== res._id);
-                    if(remainingApt.length===0){
+                    if (remainingApt.length === 0) {
                         // no apt left from state, load from server
                         apartmentsService.getAll({limit: pagination.limit, skip: 0}).then(
                             data => {
@@ -113,8 +122,7 @@ const App: React.FC = () => {
                                 setApartments(data.data);
                             }
                         );
-                    }
-                    else {
+                    } else {
                         // just remove apt form state if there still have apts
                         setApartments(apartments.filter(apartment => apartment._id !== res._id))
                     }
@@ -137,9 +145,22 @@ const App: React.FC = () => {
                                 skip: data.skip
                             });
                             setApartments(data.data);
+                            setNotification({
+                                    message: "Apartment has been added",
+                                    type: 'success'
+                                }
+                            );
+                        }
+                    );
+                })
+                .catch(error => {
+                    setNotification({
+                            message: "Cannot add new apartment, please check your data",
+                            type: 'error'
                         }
                     );
                 });
+            ;
         } else {
             // update apt
             apartmentsService.update(formAction, formData)
@@ -148,7 +169,19 @@ const App: React.FC = () => {
                     const newData = [...apartments];
                     newData[idx] = res;
                     setFormStatus('closed');
-                    setApartments(newData)
+                    setApartments(newData);
+                    setNotification({
+                            message: "Apartment has been updated",
+                            type: 'success'
+                        }
+                    );
+                })
+                .catch(error => {
+                    setNotification({
+                            message: "Cannot update apartment, please check your data",
+                            type: 'error'
+                        }
+                    );
                 });
         }
     };
@@ -195,6 +228,9 @@ const App: React.FC = () => {
                         <AddIcon/>
                     </Fab>
                 </Typography>
+
+                <Notification message={notification.message} type={notification.type}
+                              closeNotificationHandler={closeNotificationHandler}/>
 
                 {
                     formStatus === 'closed' ?
