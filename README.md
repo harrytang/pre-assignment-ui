@@ -1,21 +1,13 @@
-# Create React App example with TypeScript
+# pre-assignment-ui
 
-## How to use
+## Demo
 
-Download the example [or clone the repo](https://github.com/mui-org/material-ui):
+Hosted by Github page
 
-```sh
-curl https://codeload.github.com/mui-org/material-ui/tar.gz/master | tar -xz --strip=2 material-ui-master/examples/create-react-app-with-typescript
-cd create-react-app-with-typescript
-```
+Demo: [https://harrytang.github.io/pre-assignment-ui/](https://harrytang.github.io/pre-assignment-ui/)
 
-Install it and run:
+deploy:
 
 ```sh
-npm install
-npm start
+npm run deploy
 ```
-
-## The idea behind the example
-
-This example demonstrates how you can use [Create React App](https://github.com/facebookincubator/create-react-app) with [TypeScript](https://github.com/Microsoft/TypeScript).
